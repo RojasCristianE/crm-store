@@ -28,7 +28,6 @@ app.use(session({
     cookie: { secure: false }
 }));
 
-
 app.use('/setup', setupRouter);
 
 app.use(
