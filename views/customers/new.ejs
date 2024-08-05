@@ -1,0 +1,26 @@
+<%- include('../layout') -%>
+<div class="bg-white rounded-lg p-8">
+    <h1 class="title">Agregar nuevo cliente</h1>
+    <form id="addCustomerForm" action="/clientes/nuevo" method="post">
+        <div class="field"> <label class="label">Nombre</label>
+            <div class="control has-icons-left"> 
+                <input class="input" type="text" name="name" placeholder="Nombre de nuevo cliente" value="<%= name %>" required> 
+                <span class="icon is-small is-left"> 
+                    <i class="fas fa-user"></i>
+                </span> 
+            </div>
+        </div>
+        <div class="field"> <label class="label">Teléfono</label>
+            <div class="control has-icons-left"> <input class="input" type="tel"
+                    name="phone" placeholder="Número de teléfono" required>
+                <span class="icon is-small is-left"> <i
+                        class="fas fa-phone"></i> </span> </div>
+        </div>
+        <div class="field is-grouped">
+            <div class="control"> <button type="submit"
+                    class="button is-link">Registrar</button> </div>
+            <div class="control"> <a href="/clientes"
+                    class="button is-link is-ghost">Cancelar</a> </div>
+        </div>
+    </form>
+</div>

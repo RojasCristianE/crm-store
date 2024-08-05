@@ -1,0 +1,162 @@
+<%- include('../layout') -%>
+<div class="p-8"> <a href="/clientes" class="button is-ghost"> <span
+            class="icon"> <i class="fa-solid fa-arrow-left-long"></i> </span>
+        <span>Volver</span> </a>
+        <span class="is-flex">
+            <h1 class="title mt-4">
+                <%= customer.name %> 
+            </h1>
+            <p class="is-align-content-center m-auto"> Saldo <strong>
+                $<%= customer.debt %>
+            </strong>
+            </p>
+        </span>
+    <div class="columns">
+        <div class="column is-flex is-justify-content-center">
+            <div class="field is-grouped mt-4">
+                <p class="control"> 
+                    <a href="/clientes/<%= customer.id %>/compra/" class="button is-primary"> 
+                        <span class="icon"> 
+                            <i class="fa-solid fa-bag-shopping"></i> 
+                        </span>
+                        <span>N. compra</span> 
+                    </a> 
+                </p>
+                <p class="control"> 
+                    <a href="/clientes/<%= customer.id %>/pago/" class="button is-primary"> 
+                        <span class="icon"> 
+                            <i class="fa-solid fa-credit-card"></i> 
+                        </span>
+                        <span>N. pago</span> 
+                    </a> 
+                </p>
+                <p class="control">
+                    <a href="#" target="_blank" id="whatsapp" class="is-primary button">
+                        <span class="icon is-small">
+                          <i class="fab fa-whatsapp"></i>
+                        </span>
+                    </a>
+                </p>
+            </div>
+        </div>
+        <div class="column is-narrow is-flex is-justify-content-center">
+            <div class="field is-grouped mt-4">
+                <p class="control"> 
+                    <button id="filter-all" class="button is-light"> 
+                        <span class="icon"> 
+                            <i class="fa-solid fa-list"></i>
+                        </span> 
+                        <span>Todos</span> 
+                    </button> 
+                </p>
+                <p class="control"> 
+                    <button id="filter-purchases" class="button"> 
+                        <span class="icon">
+                            <i class="fa-solid fa-bag-shopping"></i> 
+                        </span>
+                        <span>Compras</span> 
+                    </button> 
+                </p>
+                <p class="control"> 
+                    <button id="filter-payments" class="button"> 
+                        <span class="icon">
+                            <i class="fa-solid fa-credit-card"></i> 
+                        </span>
+                        <span>Pagos</span> 
+                    </button> 
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="column p-0 mt-6">
+        <% if (movements.length > 0) { %>
+            <% movements.forEach(movement => { %>
+                <% if (movement.type === 'purchase') { %>
+                    <div class="column is-11 is-11-mobile mb-5 p-0 movement purchase-item">
+                        <div class="card">
+                            <div class="card-content">
+                                <p class="title">Compra</p>
+                                <p class="subtitle">
+                                    <%= new Date(movement.date).toLocaleDateString() %>
+                                </p>
+                                <table class="table is-fullwidth">
+                                    <thead>
+                                        <tr>
+                                            <th>C</th>
+                                            <th>Producto</th>
+                                            <th>P/U</th>
+                                            <th>T</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% movement.PurchaseItems.forEach(item => { %>
+                                            <tr>
+                                                <td><%= item.quantity %></td>
+                                                <td><%= item.name %></td>
+                                                <td>$ <%= item.price %></td>
+                                                <td>$ <%= (item.quantity * item.price) %></td>
+                                            </tr>
+                                        <% }) %>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <footer class="card-footer">
+                                <p class="card-footer-item is-flex is-justify-content-end px-6">
+                                    <span>Total: <strong>$ <%= movement.total %></strong></span>
+                                </p>
+                            </footer>
+                        </div>
+                    </div>
+                    <% } else if (movement.type === 'payment') { %>
+                    <div class="column is-5 is-11-mobile mb-5 p-0 is-offset-7 is-offset-1-mobile movement payment-item">
+                        <div class="card">
+                            <div class="card-content is-flex is-flex-direction-column">
+                                <p class="is-align-self-flex-end title">Pago</p>
+                                <p class="is-align-self-flex-end subtitle">
+                                    <%= new Date(movement.date).toLocaleDateString() %>
+                                </p>
+                            </div>
+                            <footer class="card-footer">
+                                <p class="card-footer-item is-flex is-justify-content-start px-6">
+                                    <span>Monto: <strong>$ <%= movement.amount %></strong></span>
+                                </p>
+                            </footer>
+                        </div>
+                    </div>
+                <% } %>
+            <% }) %>
+        <% } %>
+    </div>
+</div>
+<script>
+    const whatsappButton = document.getElementById('whatsapp');
+    const phoneNumber = '505<%= customer.phone %>';
+    const customerId = '<%= customer.uuid %>';
+    const whatsappUrl = `${window.location.origin}/estado/${customerId}/`;
+    const encodedUrl = encodeURIComponent(whatsappUrl);
+
+    whatsappButton.href = `https://wa.me/${phoneNumber}?text=${encodedUrl}`;
+
+    const movements = document.querySelectorAll('.movement');
+    const purchases = document.querySelectorAll('.purchase-item');
+    const payments = document.querySelectorAll('.payment-item');
+
+    document.addEventListener('click', e => {
+        if (!e.target.closest('button') || e.target.closest('.is-light')) return;
+
+        const button = e.target.closest('button');
+
+        document.querySelector('.is-light').classList.remove('is-light');
+        button.classList.add('is-light');
+
+        if (button.id === 'filter-all') {
+            movements.forEach(movement => movement.classList.remove('is-hidden'));
+        } else if (button.id === 'filter-purchases') {
+            movements.forEach(movement => movement.classList.add('is-hidden'));
+            purchases.forEach(purchase => purchase.classList.remove('is-hidden'));
+        } else if (button.id === 'filter-payments') {
+            movements.forEach(movement => movement.classList.add('is-hidden'));
+            payments.forEach(payment => payment.classList.remove('is-hidden'));
+        }
+    });
+</script>

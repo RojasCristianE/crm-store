@@ -1,0 +1,138 @@
+<%- include('../layout') -%>
+<div class="container">
+    <div class="box p-5">
+        <h1 class="title">Registrar compra de
+            <%= customer.name %>
+        </h1>
+        <form id="purchaseForm"
+            action="/clientes/<%= customer.id %>/compra/"
+            method="post">
+            <input type="hidden" id="productsData" name="productsData">
+            <table class="table is-fullwidth">
+                <thead>
+                    <tr>
+                        <th>C</th>
+                        <th>Producto</th>
+                        <th>P/U</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody id="productContainer">
+                    <tr class="product-item">
+                        <td>
+                            <input class="input" type="tel" inputmode="numeric" pattern="[0-9]*" name="products[][quantity]" required>
+                        </td>
+                        <td>
+                            <input class="input" type="text" name="products[][name]" required>
+                        </td>
+                        <td>
+                            <div class="control has-icons-left">
+                                <input class="input" type="tel" inputmode="numeric" pattern="[0-9]*" name="products[][price]" required>
+                                <span class="icon is-small is-left"> 
+                                    <i class="fa-solid fa-dollar-sign"></i>
+                                </span>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="removeProduct icon">
+                                <i class="fa-solid fa-xmark"></i>
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <button type="button" id="addProductButton" class="button is-info is-light mt-4">Agregar Producto</button>
+            <div class="field mt-4">
+                <label class="label">Total</label>
+                <div class="control has-icons-left">
+                    <input id="total" class="input" type="tel" inputmode="numeric" pattern="[0-9]*" readonly>
+                    <span class="icon is-small is-left"> 
+                        <i class="fa-solid fa-dollar-sign"></i>
+                    </span> 
+                </div>
+            </div>
+            <div class="field is-grouped mt-4">
+                <div class="control">
+                    <button type="submit" class="button is-link">
+                        <span class="icon">
+                            <i class="fa-solid fa-check"></i>
+                        </span>
+                        <span>
+                            Registrar compra
+                        </span>
+                    </button>
+                </div>
+                <div class="control">
+                    <a href="/clientes/<%= customer.id %>/" class="button is-link is-light">
+                        <span class="icon">
+                            <i class="fa-solid fa-xmark"></i>
+                        </span>
+                        <span>
+                            Cancelar
+                        </span>
+                    </a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    document.getElementById('addProductButton').addEventListener('click', () => {
+        const productContainer = document.getElementById('productContainer');
+        const newProduct = document.createElement('tr');
+        newProduct.classList.add('product-item');
+        newProduct.innerHTML = `
+            <td>
+                <input class="input" type="tel" inputmode="numeric" pattern="[0-9]*" name="products[][quantity]" required>
+            </td>
+            <td>
+                <input class="input" type="text" name="products[][name]" required>
+            </td>
+            <td>
+                <input class="input" type="tel" inputmode="numeric" pattern="[0-9]*" step="0.01" name="products[][price]" required>
+            </td>
+            <td>
+                <span class="removeProduct icon">
+                    <i class="fa-solid fa-xmark"></i>
+                </span>
+            </td>
+        `;
+        productContainer.appendChild(newProduct);
+    });
+
+    document.getElementById('productContainer').addEventListener('click', event => {
+        let target;
+
+        if (target = event.target.closest('.removeProduct')) {
+            target.parentElement.parentElement.remove();
+            calculateTotal();
+        }
+    });
+
+    document.getElementById('purchaseForm').addEventListener('input', function() {
+        calculateTotal();
+        updateProductsData();
+    });
+
+    function calculateTotal() {
+        let total = 0;
+
+        document.querySelectorAll('.product-item').forEach(function (item) {
+            const quantity = parseFloat(item.querySelector('input[name="products[][quantity]"]').value) || 0;
+            const price = parseFloat(item.querySelector('input[name="products[][price]"]').value) || 0;
+            total += quantity * price;
+        });
+        document.getElementById('total').value = total;
+    }
+
+    function updateProductsData() {
+        const products = [];
+        document.querySelectorAll('.product-item').forEach(item => {
+            const quantity = item.querySelector('input[name="products[][quantity]"]').value;
+            const name = item.querySelector('input[name="products[][name]"]').value;
+            const price = item.querySelector('input[name="products[][price]"]').value;
+            products.push({ quantity, name, price });
+        });
+        document.getElementById('productsData').value = JSON.stringify(products);
+    }
+</script>

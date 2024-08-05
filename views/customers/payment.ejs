@@ -1,0 +1,46 @@
+<%- include('../layout') -%>
+<div class="container">
+    <div class="box p-5">
+        <h1 class="title">
+            Registrar pago de <%= customer.name %>
+        </h1>
+        <form id="paymentForm" action="/clientes/<%= customer.id %>/pago/" method="post">
+            <div class="field is-horizontal py-5">
+                <div class="field-label is-normal">
+                    <label class="label">Monto</label>
+                </div>
+                <div class="field-body">
+                    <div class="field">
+                        <p class="control is-expanded has-icons-left">
+                            <input class="input" name="amount" type="tel" inputmode="numeric" pattern="[0-9]*" required>
+                            <span class="icon is-small is-left">
+                                <i class="fa-solid fa-dollar-sign"></i>
+                            </span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="field is-grouped">
+                <div class="control">
+                    <button type="submit" class="button is-link">
+                        <span class="icon">
+                            <i class="fa-solid fa-check"></i>
+                        </span>
+                        <span>Registrar Pago</span>
+                    </button>
+                </div>
+                <div class="control">
+                    <a href="/clientes/<%= customer.id %>/" class="button is-link is-light">
+                        <span class="icon">
+                            <i class="fa-solid fa-xmark"></i>
+                        </span>
+                        <span>
+                            Cancelar
+                        </span>
+                    </a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,11 @@
+{
+    "watch": [
+        "index.js",
+        "db/**/*.js",
+        "public/styles/tailwind.css",
+        "routes/**/*.js",
+        "views/**/*.ejs" 
+    ],
+    "ext": "js,ejs,css",
+    "exec": "node index.js"
+  }

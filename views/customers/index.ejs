@@ -1,0 +1,62 @@
+<%- include('../layout') -%>
+<div>
+    <h1 class="title">Lista de Clientes</h1>
+    <div class="columns is-mobile">
+        <div class="column field">
+            <div class="control has-icons-left"> 
+                <input id="search-input" class="input" type="text" placeholder="Buscar cliente"> <span
+                    class="icon is-small is-left"> <i class="fas fa-search"></i>
+                </span> </div>
+        </div>
+        <div class="column is-narrow"> 
+            <a id="new-customer-button" class="button is-link"
+                href="/clientes/nuevo/"> Nuevo </a> </div>
+    </div>
+    <% if (customers.length === 0) { %>
+        <article class="message">
+            <div class="message-body"> Aún no hay clientes registrados. </div>
+        </article>
+        <% } else { %>
+        <div class="columns is-multiline">
+            <% customers.forEach(customer => { %>
+            <div class="column customer-item is-full-mobile is-half-tablet" data-name="<%= customer.name %>">
+                <a href="/clientes/<%= customer.id %>/"
+                    class="card-link">
+                    <div class="card">
+                        <div
+                            class="card-content is-flex is-flex-direction-column">
+                            <p class="title">
+                                <%= customer.name %>
+                            </p>
+                            <p class="is-align-self-flex-end"> <span>Saldo: $
+                                <%= customer.debt %></span> </p>
+                        </div>
+                    </div>
+                </a> </div>
+            <% }) %>
+        </div>
+    <% } %>
+</div>
+<script>
+    document.getElementById('search-input').addEventListener('input', function() {
+        const searchText = this.value;
+
+        const capitalize = t => t.replace(/\b\w/g, c => c.toUpperCase());
+
+        const capitalizedSearchText = capitalize(searchText);
+        document.getElementById('new-customer-button').href = `/clientes/nuevo/?name=${encodeURIComponent(capitalizedSearchText)}`;
+
+        const filter = searchText.toUpperCase();
+        const customers = document.querySelectorAll('.customer-item');
+
+        customers.forEach(customer => {
+            const name = customer.getAttribute('data-name').toUpperCase();
+
+            if (name.includes(filter)) {
+                customer.classList.remove('is-hidden');
+            } else {
+                customer.classList.add('is-hidden');
+            }
+        });
+    });
+</script>
