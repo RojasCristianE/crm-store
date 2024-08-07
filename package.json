@@ -9,15 +9,15 @@
     "dev": "nodemon index.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "Cristian Rojas",
   "license": "ISC",
   "dependencies": {
+    "@libsql/client": "^0.8.1",
     "dotenv": "^16.4.5",
     "ejs": "^3.1.10",
     "express": "^4.19.2",
     "express-session": "^1.18.0",
-    "sequelize": "^6.37.3",
-    "sqlite3": "^5.1.7"
+    "uuid": "^10.0.0"
   },
   "devDependencies": {
     "nodemon": "^3.1.4"
