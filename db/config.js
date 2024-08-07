@@ -1,15 +1,11 @@
-import { Sequelize } from "sequelize";
-import path from 'path';
-import { fileURLToPath } from 'url';
+import { config } from 'dotenv';
+import { createClient } from '@libsql/client';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+config({ path: '.env' });
 
-const dbPath = path.resolve(__dirname, 'database.sqlite');
+const turso = createClient({
+    url: 'libsql://crm-rojascristianr.turso.io',
+    authToken: 'eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MjI5NTYyMzEsImlkIjoiYTE4ZTI1NGQtMzUwOS00Nzk5LTg2MDAtOTNiNGVlODcwNWM3In0.EzGNuK3aNnuJl7sPazZinShd8C2yyvbzgLq9bKkLIbkggHNL_Y5gymZTFsxf0N2JuQR6To7X9InGvkVBoEQuAg',
+});
 
-const sequelize = new Sequelize({
-    dialect: 'sqlite',
-    storage: dbPath
-})
-
-export default sequelize;
+export default turso;

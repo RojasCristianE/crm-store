@@ -1,26 +1,45 @@
 import express from 'express';
-import { Customer, Purchase, PurchaseItem, Payment } from '../../db/index.js';
+import turso from '../../db/config.js';
 
 const router = express.Router();
 
 router.get('/:uuid/', async ({ params: { uuid } }, res) => {
     try {
-        const customer = await Customer.findOne({
-            where: { uuid },
-            include: [
-                {
-                    model: Purchase,
-                    include: [{ model: PurchaseItem }]
-                },
-                {
-                    model: Payment,
-                }
-            ]
+        const { rows: [customer] } = await turso.execute({
+            sql: "SELECT * FROM customers WHERE uuid = ?",
+            args: [uuid]
+        });
+
+        const { rows: purchases = [] } = await turso.execute({
+            sql: "SELECT * FROM purchases WHERE customerId = ?",
+            args: [customer.id]
+        });
+
+        if (!!purchases?.length) {
+            for (const purchase of purchases) {
+                const { rows: purchaseItems } = await turso.execute({
+                    sql: 'SELECT * FROM purchase_items WHERE purchaseId = ?',
+                    args: [purchase.id]
+                });
+
+                purchase.purchaseItems = purchaseItems;
+            }
+        }
+
+        const { rows: payments = [] } = await turso.execute({
+            sql: 'SELECT * FROM payments WHERE customerId = ?',
+            args: [customer.id]
         });
 
         const movements = [
-            ...customer.Purchases.map(purchase => ({ ...purchase.toJSON(), type: 'purchase' })),
-            ...customer.Payments.map(payment => ({ ...payment.toJSON(), type: 'payment' }))
+            ...purchases.map(purchase => ({
+                ...purchase,
+                type: 'purchase'
+            })),
+            ...payments.map(payment => ({
+                ...payment,
+                type: 'payment'
+            }))
         ].sort((a, b) => new Date(b.date) - new Date(a.date));
 
         res.render('status/uuid', { customer, movements });

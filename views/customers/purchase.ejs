@@ -28,7 +28,7 @@
                         <td>
                             <div class="control has-icons-left">
                                 <input class="input" type="tel" inputmode="numeric" pattern="[0-9]*" name="products[][price]" required>
-                                <span class="icon is-small is-left"> 
+                                <span class="icon is-small is-left">
                                     <i class="fa-solid fa-dollar-sign"></i>
                                 </span>
                             </div>
@@ -89,7 +89,12 @@
                 <input class="input" type="text" name="products[][name]" required>
             </td>
             <td>
-                <input class="input" type="tel" inputmode="numeric" pattern="[0-9]*" step="0.01" name="products[][price]" required>
+                <div class="control has-icons-left">
+                    <input class="input" type="tel" inputmode="numeric" pattern="[0-9]*" name="products[][price]" required>
+                    <span class="icon is-small is-left">
+                        <i class="fa-solid fa-dollar-sign"></i>
+                    </span>
+                </div>
             </td>
             <td>
                 <span class="removeProduct icon">
