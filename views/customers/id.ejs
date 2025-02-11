@@ -93,8 +93,8 @@
                                             <tr>
                                                 <td><%= item.quantity %></td>
                                                 <td><%= item.name %></td>
-                                                <td>$ <%= item.price %></td>
-                                                <td>$ <%= (item.quantity * item.price) %></td>
+                                                <td>$<%= item.price %></td>
+                                                <td>$<%= (item.quantity * item.price) %></td>
                                             </tr>
                                         <% }) %>
                                     </tbody>
@@ -102,7 +102,7 @@
                             </div>
                             <footer class="card-footer">
                                 <p class="card-footer-item is-flex is-justify-content-end px-6">
-                                    <span>Total: <strong>$ <%= movement.total %></strong></span>
+                                    <span>Total: <strong>$<%= movement.total %></strong></span>
                                 </p>
                             </footer>
                         </div>
@@ -118,7 +118,7 @@
                             </div>
                             <footer class="card-footer">
                                 <p class="card-footer-item is-flex is-justify-content-start px-6">
-                                    <span>Monto: <strong>$ <%= movement.amount %></strong></span>
+                                    <span>Monto: <strong>$<%= movement.amount %></strong></span>
                                 </p>
                             </footer>
                         </div>
