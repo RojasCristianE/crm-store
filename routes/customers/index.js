@@ -106,8 +106,8 @@ router.post('/:customerId/compra', async ({ body: { productsData }, params: { cu
         });
 
         await turso.execute({
-            sql: 'UPDATE customers SET debt = debt + ? WHERE id = ?',
-            args: [total, id]
+            sql: "UPDATE customers SET debt = debt + ? WHERE id = ?",
+            args: [total, customerId]
         });
 
         res.redirect(`/clientes/${customerId}`);
@@ -127,14 +127,16 @@ router.get('/:id/pago', async ({ params: { id } }, res) => {
 });
 
 router.post('/:id/pago', async ({ body: { amount }, params: { id } }, res) => {
+    const amountNumber = parseFloat(amount) || 0;
+
     await turso.execute({
-        sql: 'INSERT INTO payments (customerId, amount, date) VALUES (?, ?, ?) RETURNING id',
-        args: [id, amount, new Date()]
+        sql: "INSERT INTO payments (customerId, amount, date) VALUES (?, ?, ?) RETURNING id",
+        args: [id, amountNumber, new Date()],
     });
 
     await turso.execute({
-        sql: 'UPDATE customers SET debt = debt - ? WHERE id = ?',
-        args: [amount, id]
+        sql: "UPDATE customers SET debt = debt - ? WHERE id = ?",
+        args: [amountNumber, id],
     });
 
     res.redirect(`/clientes/${id}/`);
