@@ -1,4 +1,4 @@
-<%- include('../layout') -%>
+<%- include('../layout', {title: customer.name}) -%>
 <div class="p-8"> <a href="/clientes" class="button is-ghost"> <span
             class="icon"> <i class="fa-solid fa-arrow-left-long"></i> </span>
         <span>Volver</span> </a>
@@ -102,7 +102,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <% movement.PurchaseItems.forEach(item => { %>
+                                        <% movement.purchaseItems.forEach(item => { %>
                                             <tr>
                                                 <td><%= item.quantity %></td>
                                                 <td><%= item.name %></td>

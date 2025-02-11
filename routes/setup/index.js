@@ -6,7 +6,7 @@ dotenv.config();
 const router = express.Router();
 
 router.get('/', (req, res) => {
-    res.render('setup/index', { error: null });
+    res.render('setup/index', { error: null, title: 'Identifíquese' });
 });
 
 router.post('/', (req, res) => {
