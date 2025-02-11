@@ -48,7 +48,20 @@
                             <div class="card-content">
                                 <p class="title">Compra</p>
                                 <p class="subtitle">
-                                    <%= new Date(movement.date).toLocaleDateString() %>
+                                    <%= 
+                                        new Intl
+                                            .DateTimeFormat(
+                                                'es-NI',
+                                                { 
+                                                    day: '2-digit', 
+                                                    month: '2-digit',
+                                                    year: 'numeric', 
+                                                    timeZone: 'America/Managua'
+                                                }
+                                            ).format(
+                                                new Date(movement.date)
+                                            ) 
+                                    %>
                                 </p>
                                 <table class="table is-fullwidth">
                                     <thead>
@@ -64,8 +77,8 @@
                                             <tr>
                                                 <td><%= item.quantity %></td>
                                                 <td><%= item.name %></td>
-                                                <td>$ <%= item.price %></td>
-                                                <td>$ <%= (item.quantity * item.price) %></td>
+                                                <td>$<%= item.price %></td>
+                                                <td>$<%= (item.quantity * item.price) %></td>
                                             </tr>
                                         <% }) %>
                                     </tbody>
@@ -73,7 +86,7 @@
                             </div>
                             <footer class="card-footer">
                                 <p class="card-footer-item is-flex is-justify-content-end px-6">
-                                    <span>Total: <strong>$ <%= movement.total %></strong></span>
+                                    <span>Total: <strong>$<%= movement.total %></strong></span>
                                 </p>
                             </footer>
                         </div>
@@ -84,12 +97,25 @@
                             <div class="card-content is-flex is-flex-direction-column">
                                 <p class="is-align-self-flex-end title">Pago</p>
                                 <p class="is-align-self-flex-end subtitle">
-                                    <%= new Date(movement.date).toLocaleDateString() %>
+                                    <%= 
+                                        new Intl
+                                            .DateTimeFormat(
+                                                'es-NI',
+                                                { 
+                                                    day: '2-digit', 
+                                                    month: '2-digit',
+                                                    year: 'numeric', 
+                                                    timeZone: 'America/Managua'
+                                                }
+                                            ).format(
+                                                new Date(movement.date)
+                                            ) 
+                                    %>
                                 </p>
                             </div>
                             <footer class="card-footer">
                                 <p class="card-footer-item is-flex is-justify-content-start px-6">
-                                    <span>Monto: <strong>$ <%= movement.amount %></strong></span>
+                                    <span>Monto: <strong>$<%= movement.amount %></strong></span>
                                 </p>
                             </footer>
                         </div>

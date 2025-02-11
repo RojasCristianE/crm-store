@@ -68,12 +68,22 @@ router.post('/:id/compra', async (req, res) => {
 
         let total = 0;
         for (const { name, quantity, price } of products) {
-            await PurchaseItem.create({ purchaseId: purchase.id, quantity, name, price, total: quantity * price });
+            const qty = Number(quantity);
+            const prc = Number(price);
+            const itemTotal = qty * prc;
             
-            total += quantity * price;
+            await PurchaseItem.create({
+                purchaseId: purchase.id,
+                quantity: qty,
+                name,
+                price: prc,
+                total: itemTotal,
+            });
+            
+            total += itemTotal;
         }
 
-        purchase.total += total;
+        purchase.total = total;
         await purchase.save();
 
         customer.debt += total;
@@ -82,7 +92,7 @@ router.post('/:id/compra', async (req, res) => {
         res.redirect(`/clientes/${customerId}`);
     } catch (error) {
         console.error('Error al registrar la compra:', error);
-        res.status(500).send('Error al registrar la compra');
+        res.status(500).send("Error al registrar la compra", error.message);
     }
 });
 
